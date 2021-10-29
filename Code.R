@@ -26,7 +26,10 @@ race%>%
   summarise(Total=sum(n))%>%
   data.frame()->ridge
 
-ggplot(ridge,aes(x=Total,y=country,fill=stat(quantile)))+
+ridge%>%
+  mutate(country=fct_relevel(country,levels="Sweden", "Australia", "France","United Kingdom","United States"))->ridge1
+
+ggplot(ridge1,aes(x=Total,y=country,fill=stat(quantile)))+
   stat_density_ridges(geom="density_ridges_gradient",
                       calc_ecdf = TRUE)+
   scale_fill_manual(values=c("#961a1a","#d9ead3","#134f5c","#0c343d"))+
@@ -48,5 +51,5 @@ ggplot(ridge,aes(x=Total,y=country,fill=stat(quantile)))+
   labs(title="ULTRA-RUNNING EVENTS OVER THE YEARS",
        subtitle="The number of ultra-running events conducted from 2012 to 2021 by the top five countries that have organized the highest number of events thus far",
        caption = "Data:BjnNowak-Github Repo via Tidy Tuesday | Design: @annapurani93")->ridgeplot
-       
+
      ggsave("ridgeplot.png",ridgeplot,width=12,height=6.1)
